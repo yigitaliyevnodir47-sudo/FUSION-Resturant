@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FUSION Restaurant — Nurafshon</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --g:#c9a84c;--gl:#e8c97a;--gd:#7a6230;
+  --b:#080705;--b2:#100d08;--b3:#181209;
+  --t:#f0e8d8;--tm:#8a7d6a;--td:#3a3428;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--b);color:var(--t);font-family:'DM Sans',sans-serif;overflow-x:hidden}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--b)}
+::-webkit-scrollbar-thumb{background:var(--gd)}
+
+/* PROGRESS BAR */
+#prog{position:fixed;top:0;left:0;height:2px;background:var(--g);z-index:999;width:0;transition:width .1s}
+
+/* NOISE */
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  background-size:256px;opacity:.5}
+
+/* ══ NAV ══ */
+nav{position:fixed;top:0;left:0;right:0;z-index:300;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:18px 64px;transition:all .4s}
+nav.scrolled{background:rgba(8,7,5,.96);backdrop-filter:blur(12px);padding:12px 64px;border-bottom:1px solid rgba(201,168,76,.08)}
+.nav-logo{font-family:'Cinzel Decorative',serif;font-size:1.15rem;letter-spacing:.22em;color:var(--g);text-decoration:none}
+.nav-links{display:flex;gap:36px;list-style:none}
+.nav-links a{color:var(--tm);text-decoration:none;font-size:.73rem;letter-spacing:.18em;text-transform:uppercase;transition:color .3s;position:relative}
+.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1px;background:var(--g);transition:width .3s}
+.nav-links a:hover{color:var(--g)}
+.nav-links a:hover::after{width:100%}
+.nav-r{display:flex;align-items:center;gap:14px}
+.lsw{display:flex;gap:0;border:1px solid rgba(201,168,76,.2);overflow:hidden}
+.lb{background:transparent;border:none;color:var(--tm);font-family:'DM Sans',sans-serif;font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;padding:6px 14px;cursor:pointer;transition:all .25s}
+.lb.on{background:var(--g);color:var(--b)}
+.ntel{font-size:.78rem;color:var(--g);text-decoration:none;border:1px solid var(--gd);padding:7px 18px;transition:all .3s;letter-spacing:.04em}
+.ntel:hover{background:var(--g);color:var(--b)}
+
+/* ══ HERO ══ */
+.hero{position:relative;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;overflow:hidden}
+.hero-img{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1600&q=80') center/cover no-repeat;filter:brightness(.25) saturate(.7)}
+.hero-overlay{position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 50% 50%,rgba(201,168,76,.08) 0%,transparent 70%),linear-gradient(to bottom,transparent 40%,rgba(8,7,5,.95) 100%)}
+.ring{position:absolute;border-radius:50%;border:1px solid rgba(201,168,76,.07);top:50%;left:50%;transform:translate(-50%,-50%);animation:rpulse 9s ease-in-out infinite}
+.ring:nth-child(1){width:700px;height:700px}
+.ring:nth-child(2){width:500px;height:500px;border-color:rgba(201,168,76,.1);animation-delay:-3s}
+.ring:nth-child(3){width:300px;height:300px;border-color:rgba(201,168,76,.14);animation-delay:-6s}
+@keyframes rpulse{0%,100%{opacity:.35;transform:translate(-50%,-50%) scale(1)}50%{opacity:.9;transform:translate(-50%,-50%) scale(1.03)}}
+.hc{position:relative;z-index:2;padding:0 24px}
+.h-eyebrow{font-size:.66rem;letter-spacing:.5em;text-transform:uppercase;color:var(--g);margin-bottom:24px;opacity:0;animation:fadeUp .9s .4s forwards}
+.h-title{font-family:'Cinzel Decorative',serif;font-size:clamp(4rem,13vw,10rem);line-height:.88;color:var(--g);text-shadow:0 0 120px rgba(201,168,76,.25),0 0 40px rgba(201,168,76,.15);opacity:0;animation:fadeUp .9s .7s forwards}
+.h-subtitle{font-family:'Cormorant Garamond',serif;font-size:clamp(1.05rem,2.5vw,1.7rem);font-style:italic;color:rgba(240,232,216,.65);margin-top:18px;letter-spacing:.1em;opacity:0;animation:fadeUp .9s 1s forwards}
+.h-line{width:70px;height:1px;background:linear-gradient(90deg,transparent,var(--g),transparent);margin:28px auto;opacity:0;animation:fadeUp .9s 1.3s forwards}
+.h-chips{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;opacity:0;animation:fadeUp .9s 1.6s forwards}
+.chip{font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(240,232,216,.5);padding:7px 18px;border:1px solid rgba(201,168,76,.18);transition:all .35s;backdrop-filter:blur(4px)}
+.chip:hover{border-color:var(--g);color:var(--g);background:rgba(201,168,76,.06)}
+.h-scroll{position:absolute;bottom:36px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;opacity:0;animation:fadeUp .9s 2.2s forwards}
+.h-scroll span{font-size:.6rem;letter-spacing:.35em;text-transform:uppercase;color:var(--tm)}
+.scrollline{width:1px;height:44px;background:linear-gradient(var(--g),transparent);animation:scrl 2s ease-in-out infinite}
+@keyframes scrl{0%{opacity:0;transform:scaleY(0);transform-origin:top}50%{opacity:1;transform:scaleY(1)}100%{opacity:0;transform:scaleY(0);transform-origin:bottom}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:translateY(0)}}
+
+/* ══ GENERAL ══ */
+section,div[id]{position:relative;z-index:1}
+.wrap{max-width:1220px;margin:0 auto;padding:0 64px}
+.pad{padding:96px 0}
+
+.sh{text-align:center;margin-bottom:68px}
+.slbl{display:block;font-size:.64rem;letter-spacing:.5em;text-transform:uppercase;color:var(--g);margin-bottom:14px}
+.stitle{font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,4vw,3.4rem);font-weight:300;line-height:1.15}
+.stitle em{color:var(--g);font-style:italic}
+.sdesc{font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:var(--tm);margin-top:14px;font-style:italic;line-height:1.8}
+
+.sep{display:flex;align-items:center;gap:20px;max-width:1220px;margin:0 auto;padding:0 64px}
+.sepline{flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(201,168,76,.18))}
+.sepline.r{background:linear-gradient(90deg,rgba(201,168,76,.18),transparent)}
+.dia{width:7px;height:7px;background:var(--gd);transform:rotate(45deg)}
+
+/* ══ STATS ══ */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);background:var(--b2);border-top:1px solid rgba(201,168,76,.1);border-bottom:1px solid rgba(201,168,76,.1)}
+.stat-box{padding:44px 20px;text-align:center;border-right:1px solid rgba(201,168,76,.08)}
+.stat-box:last-child{border-right:none}
+.stat-n{font-family:'Cinzel Decorative',serif;font-size:2.4rem;color:var(--g);line-height:1}
+.stat-l{font-size:.67rem;letter-spacing:.2em;text-transform:uppercase;color:var(--tm);margin-top:8px}
+
+/* ══ ABOUT ══ */
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:0}
+.about-img{position:relative;overflow:hidden;min-height:520px}
+.about-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.65) saturate(.85);transition:transform 6s ease}
+.about-img:hover img{transform:scale(1.04)}
+.about-img-overlay{position:absolute;inset:0;background:linear-gradient(120deg,rgba(8,7,5,.5) 0%,transparent 60%)}
+.about-quote{position:absolute;bottom:40px;left:40px;right:40px;z-index:2}
+.aq-marks{font-family:'Cormorant Garamond',serif;font-size:4rem;color:var(--g);line-height:.6;opacity:.4}"</div>
+.aq-text{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-style:italic;color:var(--t);line-height:1.6;margin-top:12px}
+.aq-sig{font-size:.66rem;letter-spacing:.25em;text-transform:uppercase;color:var(--g);margin-top:12px}
+.about-content{background:var(--b2);padding:72px 64px;display:flex;flex-direction:column;justify-content:center}
+.about-lbl{font-size:.64rem;letter-spacing:.45em;text-transform:uppercase;color:var(--g);margin-bottom:18px}
+.about-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,3.5vw,2.8rem);font-weight:300;line-height:1.2;margin-bottom:28px}
+.about-title em{color:var(--g);font-style:italic}
+.about-body{font-size:.93rem;color:var(--tm);line-height:1.95;margin-bottom:18px}
+.about-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:32px}
+.atag{font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;color:var(--g);border:1px solid rgba(201,168,76,.25);padding:6px 14px}
+
+/* ══ CHEF PICKS ══ */
+.chef-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:3px}
+.chef-card{position:relative;overflow:hidden;aspect-ratio:3/4;cursor:default}
+.chef-card img{width:100%;height:100%;object-fit:cover;filter:brightness(.55) saturate(.85);transition:all .6s}
+.chef-card:hover img{filter:brightness(.7) saturate(1);transform:scale(1.05)}
+.chef-info{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:32px 28px;background:linear-gradient(transparent 30%,rgba(8,7,5,.9) 100%)}
+.chef-badge{display:inline-block;font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;background:var(--g);color:var(--b);padding:4px 10px;margin-bottom:12px;width:fit-content}
+.chef-name{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:600;color:var(--t);line-height:1.2;margin-bottom:8px}
+.chef-desc{font-size:.78rem;color:rgba(240,232,216,.6);line-height:1.6;margin-bottom:12px}
+.chef-price{font-size:1rem;color:var(--g);font-family:'Cormorant Garamond',serif;font-weight:600}
+
+/* ══ MENU SECTION ══ */
+.menu-area{padding:96px 0;max-width:1220px;margin:0 auto;padding-left:64px;padding-right:64px}
+.cat-bar{display:flex;gap:0;flex-wrap:wrap;justify-content:center;margin-bottom:56px;border:1px solid rgba(201,168,76,.15);width:fit-content;margin-left:auto;margin-right:auto;overflow:hidden}
+.ctab{background:transparent;border:none;border-right:1px solid rgba(201,168,76,.12);color:var(--tm);font-family:'DM Sans',sans-serif;font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;padding:13px 26px;cursor:pointer;transition:all .3s;white-space:nowrap}
+.ctab:last-child{border-right:none}
+.ctab.on{background:var(--g);color:var(--b);letter-spacing:.22em}
+.cat-panel{display:none;animation:panelIn .4s ease}
+.cat-panel.on{display:block}
+@keyframes panelIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* category photo header */
+.cat-hero{width:100%;height:260px;object-fit:cover;filter:brightness(.6) saturate(.8);margin-bottom:3px;display:block}
+.cat-hero-grid{display:grid;gap:3px;margin-bottom:3px}
+.cat-hero-grid img{width:100%;height:100%;object-fit:cover;filter:brightness(.58) saturate(.8)}
+
+.mgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:2px;margin-top:0}
+.mi{background:var(--b2);padding:26px 30px;border:1px solid transparent;transition:border-color .3s;position:relative;overflow:hidden}
+.mi::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--g);transform:scaleY(0);transition:transform .35s;transform-origin:bottom}
+.mi:hover{border-color:rgba(201,168,76,.18)}
+.mi:hover::before{transform:scaleY(1)}
+.mitop{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.miname{font-family:'Cormorant Garamond',serif;font-size:1.18rem;font-weight:600;line-height:1.25}
+.miprice{font-size:.88rem;color:var(--g);white-space:nowrap;font-weight:500;letter-spacing:.03em;padding-top:2px}
+.midesc{font-size:.79rem;color:var(--tm);margin-top:8px;line-height:1.75}
+.mitag{display:inline-block;font-size:.57rem;letter-spacing:.15em;text-transform:uppercase;background:rgba(201,168,76,.12);color:var(--g);padding:2px 8px;margin-bottom:10px;border-radius:0}
+
+.sublbl{display:block;font-size:.62rem;letter-spacing:.42em;text-transform:uppercase;color:var(--g);padding:20px 0 14px;border-bottom:1px solid rgba(201,168,76,.12);margin-bottom:0}
+
+/* sides & drinks */
+.sgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px}
+.dkgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
+.dcard{background:var(--b2);padding:30px 28px;border:1px solid transparent;transition:all .35s}
+.dcard:hover{border-color:rgba(201,168,76,.18);transform:translateY(-3px)}
+.dico{font-size:2.2rem;margin-bottom:14px;display:block}
+.dname{font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--gl);margin-bottom:10px}
+.ditems{font-size:.78rem;color:var(--tm);line-height:2}
+
+/* ══ GALLERY ══ */
+.gallery-grid{display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:auto auto;gap:3px}
+.gi{overflow:hidden;position:relative;cursor:default}
+.gi img{width:100%;height:100%;object-fit:cover;filter:brightness(.65) saturate(.8);transition:all .5s;display:block}
+.gi:hover img{filter:brightness(.85) saturate(1.1);transform:scale(1.04)}
+.gi.tall{grid-row:span 2}
+.gi.wide{grid-column:span 2}
+.gi-cap{position:absolute;bottom:0;left:0;right:0;padding:18px 20px;background:linear-gradient(transparent,rgba(8,7,5,.85));font-family:'Cormorant Garamond',serif;font-size:.95rem;font-style:italic;color:var(--gl);opacity:0;transition:opacity .35s;transform:translateY(6px);transition:all .35s}
+.gi:hover .gi-cap{opacity:1;transform:translateY(0)}
+
+/* ══ TESTIMONIALS ══ */
+.testi-row{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
+.tcard{background:var(--b2);padding:40px 36px;border:1px solid rgba(201,168,76,.06);position:relative}
+.tcard::before{content:'\201C';position:absolute;top:20px;right:28px;font-family:'Cormorant Garamond',serif;font-size:5rem;color:rgba(201,168,76,.12);line-height:1}
+.ttext{font-family:'Cormorant Garamond',serif;font-size:1.08rem;font-style:italic;color:var(--t);line-height:1.75;margin-bottom:24px}
+.tname{font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:var(--g)}
+.tstars{color:var(--g);font-size:.8rem;margin-bottom:14px;letter-spacing:3px}
+
+/* ══ FEAT STRIP ══ */
+.feat{background:var(--b2);border-top:1px solid rgba(201,168,76,.08);border-bottom:1px solid rgba(201,168,76,.08);padding:72px 0}
+.fgrid{max-width:1220px;margin:0 auto;padding:0 64px;display:grid;grid-template-columns:repeat(4,1fr);gap:0}
+.fitem{padding:32px 24px;text-align:center;border-right:1px solid rgba(201,168,76,.08)}
+.fitem:last-child{border-right:none}
+.fico{font-size:2.2rem;margin-bottom:14px;display:block}
+.ftitle{font-family:'Cormorant Garamond',serif;font-size:1.15rem;color:var(--g);margin-bottom:8px}
+.fdesc{font-size:.78rem;color:var(--tm);line-height:1.75}
+
+/* ══ CONTACT ══ */
+.cgrid{display:grid;grid-template-columns:1.1fr 1fr;gap:0}
+.cmap{background:var(--b3);min-height:480px;position:relative;overflow:hidden}
+.cmap img{width:100%;height:100%;object-fit:cover;filter:brightness(.4) saturate(.5)}
+.cmap-info{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;padding:56px 52px;gap:32px}
+.citem{display:flex;gap:20px;align-items:flex-start}
+.cicon{width:44px;height:44px;border:1px solid rgba(201,168,76,.28);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+.clbl{font-size:.62rem;letter-spacing:.3em;text-transform:uppercase;color:var(--g);margin-bottom:5px}
+.cval{font-family:'Cormorant Garamond',serif;font-size:1.2rem;line-height:1.4}
+.cform{background:var(--b2);padding:56px 52px;display:flex;flex-direction:column;gap:14px;justify-content:center}
+.cform-title{font-family:'Cormorant Garamond',serif;font-size:1.5rem;margin-bottom:6px}
+.cform-sub{font-size:.82rem;color:var(--tm);margin-bottom:16px;line-height:1.7}
+.flbl{font-size:.62rem;letter-spacing:.28em;text-transform:uppercase;color:var(--tm)}
+.fi,.ft{background:var(--b3);border:1px solid rgba(201,168,76,.12);color:var(--t);font-family:'DM Sans',sans-serif;font-size:.88rem;padding:13px 16px;outline:none;transition:border-color .3s;resize:none;width:100%}
+.fi:focus,.ft:focus{border-color:var(--g)}
+.ft{height:100px}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.fsub{background:var(--g);color:var(--b);border:none;font-family:'DM Sans',sans-serif;font-size:.72rem;letter-spacing:.28em;text-transform:uppercase;padding:16px;cursor:pointer;transition:all .3s;width:100%;margin-top:4px}
+.fsub:hover{background:var(--gl)}
+
+/* ══ TOAST ══ */
+.toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--g);color:var(--b);font-size:.82rem;letter-spacing:.08em;padding:14px 32px;z-index:999;opacity:0;transition:all .4s;pointer-events:none;font-weight:500}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ══ FLOAT BTN ══ */
+.floatbtn{position:fixed;bottom:32px;right:32px;z-index:400;display:flex;flex-direction:column;gap:10px;align-items:flex-end}
+.fbtn{width:52px;height:52px;border-radius:50%;border:none;font-size:1.4rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .3s;text-decoration:none;box-shadow:0 4px 20px rgba(0,0,0,.4)}
+.fbtn-call{background:var(--g);color:var(--b)}
+.fbtn-call:hover{background:var(--gl);transform:scale(1.08)}
+.fbtn-ig{background:#e1306c;color:#fff}
+.fbtn-ig:hover{background:#c13584;transform:scale(1.08)}
+
+/* ══ FOOTER ══ */
+footer{background:var(--b2);border-top:1px solid rgba(201,168,76,.08);padding:56px 64px}
+.ft-grid{max-width:1220px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr 1fr;gap:48px;align-items:start}
+.ft-brand .fl-logo{font-family:'Cinzel Decorative',serif;font-size:1.3rem;color:var(--g);margin-bottom:14px;display:block}
+.ft-brand p{font-size:.8rem;color:var(--tm);line-height:1.8}
+.ft-nav h4,.ft-contact h4{font-size:.64rem;letter-spacing:.35em;text-transform:uppercase;color:var(--g);margin-bottom:18px}
+.ft-nav ul{list-style:none;display:flex;flex-direction:column;gap:10px}
+.ft-nav a{color:var(--tm);text-decoration:none;font-size:.82rem;transition:color .3s}
+.ft-nav a:hover{color:var(--g)}
+.ft-contact p{font-size:.82rem;color:var(--tm);line-height:2}
+.ft-contact a{color:var(--tm);text-decoration:none;transition:color .3s}
+.ft-contact a:hover{color:var(--g)}
+.ft-bottom{max-width:1220px;margin:0 auto;padding-top:36px;border-top:1px solid rgba(201,168,76,.07);margin-top:40px;display:flex;justify-content:space-between;align-items:center}
+.ft-copy{font-size:.7rem;color:var(--td);letter-spacing:.1em}
+.ft-soc{display:flex;gap:10px}
+.soca{width:36px;height:36px;border:1px solid rgba(201,168,76,.18);display:flex;align-items:center;justify-content:center;text-decoration:none;font-size:.9rem;transition:all .3s}
+.soca:hover{border-color:var(--g);background:rgba(201,168,76,.08)}
+
+/* ══ RESPONSIVE ══ */
+@media(max-width:960px){
+  nav,nav.scrolled{padding:14px 20px}
+  .nav-links{display:none}
+  .wrap,.sep,.menu-area,.fgrid{padding-left:20px;padding-right:20px}
+  .about-grid,.cgrid{grid-template-columns:1fr}
+  .about-img{min-height:320px}
+  .chef-grid{grid-template-columns:1fr}
+  .chef-card{aspect-ratio:16/9}
+  .gallery-grid{grid-template-columns:repeat(2,1fr)}
+  .gi.tall,.gi.wide{grid-row:span 1;grid-column:span 1}
+  .fgrid{grid-template-columns:repeat(2,1fr)}
+  .fitem{border-right:none;border-bottom:1px solid rgba(201,168,76,.08)}
+  .mgrid,.sgrid{grid-template-columns:1fr}
+  .dkgrid{grid-template-columns:1fr 1fr}
+  .testi-row{grid-template-columns:1fr}
+  .stats-row{grid-template-columns:repeat(2,1fr)}
+  .stat-box{border-bottom:1px solid rgba(201,168,76,.08)}
+  footer{padding:40px 20px}
+  .ft-grid{grid-template-columns:1fr;gap:32px}
+  .ft-bottom{flex-direction:column;gap:16px;text-align:center}
+  .cat-bar{width:100%;border:none;gap:2px}
+  .ctab{flex:1;text-align:center;font-size:.62rem;padding:10px 8px;border:1px solid rgba(201,168,76,.12)}
+  .cform,.cmap-info{padding:36px 28px}
+  .frow{grid-template-columns:1fr}
+  .floatbtn{bottom:20px;right:16px}
+}
+</style>
+</head>
+<body>
+
+<div id="prog"></div>
+
+<!-- ══ NAV ══ -->
+<nav id="mainnav">
+  <a href="#" class="nav-logo">FUSION</a>
+  <ul class="nav-links">
+    <li><a href="#about"  id="nl-about">Biz haqimizda</a></li>
+    <li><a href="#picks"  id="nl-picks">Oshpaz tavsiyasi</a></li>
+    <li><a href="#menu"   id="nl-menu">Menyu</a></li>
+    <li><a href="#gallery"id="nl-gal">Galereya</a></li>
+    <li><a href="#contact"id="nl-contact">Aloqa</a></li>
+  </ul>
+  <div class="nav-r">
+    <div class="lsw">
+      <button class="lb on" onclick="setL('uz')">UZ</button>
+      <button class="lb"    onclick="setL('ru')">RU</button>
+    </div>
+    <a href="tel:+998337832828" class="ntel">+998 33 783 28 28</a>
+  </div>
+</nav>
+
+<!-- ══ HERO ══ -->
+<div class="hero">
+  <div class="hero-img"></div>
+  <div class="hero-overlay"></div>
+  <div class="ring"></div><div class="ring"></div><div class="ring"></div>
+  <div class="hc">
+    <p class="h-eyebrow" id="h-eye">Nurafshon · 2024</p>
+    <h1 class="h-title">FUSION</h1>
+    <p class="h-subtitle" id="h-sub">Sharq va G'arb — bir dasturxonda</p>
+    <div class="h-line"></div>
+    <div class="h-chips">
+      <span class="chip">🍣 Sushi</span>
+      <span class="chip">🥩 Steak</span>
+      <span class="chip">🍲 Kimchi Tige</span>
+      <span class="chip" id="h-chip4">🌿 Yangi Mahsulotlar</span>
+    </div>
+  </div>
+  <div class="h-scroll"><span id="h-scrl">Pastga</span><div class="scrollline"></div></div>
+</div>
+
+<!-- ══ STATS ══ -->
+<div class="stats-row">
+  <div class="stat-box"><div class="stat-n">12+</div><div class="stat-l" id="st1">Yil Tajriba</div></div>
+  <div class="stat-box"><div class="stat-n">50+</div><div class="stat-l" id="st2">Menyu Taomi</div></div>
+  <div class="stat-box"><div class="stat-n">3</div><div class="stat-l" id="st3">Millat Oshxonasi</div></div>
+  <div class="stat-box"><div class="stat-n">634</div><div class="stat-l" id="st4">Instagram Obunachilar</div></div>
+</div>
+
+<!-- ══ ABOUT ══ -->
+<section id="about">
+<div class="about-grid">
+  <div class="about-img">
+    <img src="https://images.unsplash.com/photo-1600565193348-f74bd3c7ccdf?w=900&q=80" alt="Chef cooking">
+    <div class="about-img-overlay"></div>
+    <div class="about-quote">
+      <div class="aq-marks">"</div>
+      <div class="aq-text" id="aq-text">Har bir taom uchta qit'a hikoyasini bir xizmatda aytib beradi.</div>
+      <div class="aq-sig" id="aq-sig">— Bosh Oshpaz, Fusion Restaurant</div>
+    </div>
+  </div>
+  <div class="about-content">
+    <div class="about-lbl" id="ab-lbl">Bizning Hikoyamiz</div>
+    <h2 class="about-title" id="ab-title">Oshpazlik<br><em>San'atining</em> Uyiga Xush Kelibsiz</h2>
+    <p class="about-body" id="ab-b1">FUSION — Nurafshondagi noyob restoran bo'lib, Yevropa, Osiyo va Sharq oshxonalarini bitta dasturxonda birlashtiradi. Biz uchun har bir taom — bu san'at asari.</p>
+    <p class="about-body" id="ab-b2">Bizning oshpazlarimiz Yevropaning yetakchi oshxonalarida 12 yildan ortiq tajribaga ega. Ular har kuni eng yangi mahsulotlardan noyob ta'mlar yaratadi.</p>
+    <div class="about-tags">
+      <span class="atag" id="at1">🌍 Fusion Oshxona</span>
+      <span class="atag" id="at2">🌿 Yangi Ingredientlar</span>
+      <span class="atag" id="at3">👨‍🍳 12+ Yil Tajriba</span>
+      <span class="atag" id="at4">📍 Nurafshon</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<div class="sep" style="margin-top:0"><div class="sepline"></div><div class="dia"></div><div class="sepline r"></div></div>
+
+<!-- ══ CHEF PICKS ══ -->
+<section id="picks">
+<div class="wrap pad">
+  <div class="sh">
+    <span class="slbl" id="cp-lbl">Maxsus Tavsiya</span>
+    <h2 class="stitle" id="cp-title">Oshpaz <em>Tavsiyalari</em></h2>
+    <p class="sdesc" id="cp-desc">Bizning eng sevimli va eng ko'p buyuriladigan taomlarimiz</p>
+  </div>
+  <div class="chef-grid">
+    <div class="chef-card">
+      <img src="https://images.unsplash.com/photo-1514516870897-e9ad31b46b5b?w=600&q=80" alt="Lamb rack">
+      <div class="chef-info">
+        <span class="chef-badge" id="cb1">Oshpaz tavsiyasi</span>
+        <div class="chef-name" id="cn1">Qo'y qovurg'asi Demi-glas</div>
+        <div class="chef-desc" id="cd1">Yumshoq qo'y go'shti, boyitilgan demi-glas sousi, mavsumiy grilli sabzavotlar</div>
+        <div class="chef-price">140 000 UZS</div>
+      </div>
+    </div>
+    <div class="chef-card">
+      <img src="https://images.unsplash.com/photo-1548943487-a2e4e43b4853?w=600&q=80" alt="Tom Yum">
+      <div class="chef-info">
+        <span class="chef-badge" id="cb2">Premium</span>
+        <div class="chef-name" id="cn2">Tom-Yam Kung</div>
+        <div class="chef-desc" id="cd2">Tailand qirol qisqichbaqalari, kokosom süt, limongrass, chili — janubiy-sharqiy Osiyo ta'mi</div>
+        <div class="chef-price">85 000 UZS</div>
+      </div>
+    </div>
+    <div class="chef-card">
+      <img src="https://images.unsplash.com/photo-1553621042-f6e147245754?w=600&q=80" alt="Sushi">
+      <div class="chef-info">
+        <span class="chef-badge" id="cb3">Bestseller</span>
+        <div class="chef-name" id="cn3">Philadelphia Premium Roll</div>
+        <div class="chef-desc" id="cd3">Qizil baliq, krem pishloq, avokado — premium nori ichida. Eng ko'p buyuriladigan roll</div>
+        <div class="chef-price">120 000 UZS</div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<div class="sep"><div class="sepline"></div><div class="dia"></div><div class="sepline r"></div></div>
+
+<!-- ══ MENU ══ -->
+<section id="menu">
+<div class="menu-area">
+  <div class="sh">
+    <span class="slbl" id="m-lbl">To'liq Menyu</span>
+    <h2 class="stitle" id="m-title">Bizning <em>Menyumiz</em></h2>
+  </div>
+
+  <div class="cat-bar">
+    <button class="ctab on" onclick="showC('salads',this)" id="tab-s">🥗 Salatlar</button>
+    <button class="ctab"    onclick="showC('soups',this)"  id="tab-p">🍲 Sho'rvalar</button>
+    <button class="ctab"    onclick="showC('mains',this)"  id="tab-m">🍽 Asosiy</button>
+    <button class="ctab"    onclick="showC('sushi',this)"  id="tab-r">🍣 Sushi</button>
+    <button class="ctab"    onclick="showC('sides',this)"  id="tab-g">🍟 Garnitür</button>
+    <button class="ctab"    onclick="showC('drinks',this)" id="tab-d">☕ Ichimliklar</button>
+  </div>
+
+  <!-- SALADS -->
+  <div class="cat-panel on" id="cat-salads">
+    <div class="cat-hero-grid" style="grid-template-columns:2fr 1fr 1fr;height:240px">
+      <img src="https://images.unsplash.com/photo-1543339308-43e59d6b73a6?w=900&q=80" alt="Salad">
+      <img src="https://images.unsplash.com/photo-1505253716362-afaea1d3d1af?w=400&q=80" alt="Burrata">
+      <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&q=80" alt="Greens">
+    </div>
+    <div class="mgrid">
+      <div class="mi"><div class="mitop"><div class="miname" id="s1n">Rukkola va Burata salati</div><div class="miprice">110 000</div></div><div class="midesc" id="s1d">Yangi rukkola, burata pishlog'i, olcha pomidorlar, ekstra virgin zaytun yog'i</div></div>
+      <div class="mi"><div class="mitop"><div class="miname" id="s2n">Gretsiya salati</div><div class="miprice">60 000</div></div><div class="midesc" id="s2d">Pomidor, bodring, zaytun, feta pishloq, zaytun yog'i, oregano</div></div>
+      <div class="mi"><div class="mitop"><div class="miname" id="s3n">Pomidor va Strachatelella</div><div class="miprice">75 000</div></div><div class="midesc" id="s3d">Pishgan pomidorlar, strachatelella pishloq, balzamik reduksiya, nozik sous</div></div>
+      <div class="mi"><div class="mitop"><div class="miname" id="s4n">Klassik "Sezar" — Tovuq bilan</div><div class="miprice">50 000</div></div><div class="midesc" id="s4d">Romaine, grilli tovuq ko'kragi, parmezan, xrustli krutoni, uy sousi</div></div>
+      <div class="mi"><div class="mitop"><div class="miname" id="s5n">Sezar — Qisqichbaqa bilan</div><div class="miprice">80 000</div></div><div class="midesc" id="s5d">Romaine, grilli qirollik qisqichbaqa, parmezan, krutoni, Sezar sousi</div></div>
+      <div class="mi"><div class="mitop"><div class="miname" id="s6n">Smetanali sabzavot salati</div><div class="miprice">40 000</div></div><div class="midesc" id="s6d">Mavsumiy yangi sabzavotlar, qaymoq sousi bilan — oddiy va mazali</div></div>
+      <div class="mi"><div class="mitop"><div class="miname" id="s7n">Qovurilgan baqlajon va Rukkola</div><div class="miprice">60 000</div></div><div class="midesc" id="s7d">Xrustli qovurilgan baqlajon, yangi rukkola, nozik zaytun sousi</div></div>
+      <div class="mi"><div class="mitop"><div class="miname" id="s8n">Tuna salati</div><div class="miprice">90 000</div></div><div class="midesc" id="s8d">Premium tuna, aralash ko'katlar, kaperslar, qizil piyoz, zaytun yog'i</div></div>
+      <div class="mi"><div class="mitop"><div class="miname" id="s9n">Avokadoli Rukkola</div><div class="miprice">55 000</div></div><div class="midesc" id="s9d">Yangi rukkola, pishgan avokado, limon sousi, kunjut urug'lari, ko'katlar</div></div>
+    </div>
+  </div>
+
+  <!-- SOUPS -->
+  <div class="cat-panel" id="cat-soups">
+    <div class="cat-hero-grid" style="grid-template-columns:1fr 1fr;height:220px">
+      <img src="https://images.unsplash.com/photo-1548943487-a2e4e43b4853?w=700&q=80" alt="Tom Yum">
+      <img src="https://images.unsplash.com/photo-1547592180-85f173990554?w=700&q=80" alt="Soup">
+    </div>
+    <div class="mgrid">
+      <div class="mi"><div class="mitop"><div class="miname" id="p1n">Mol go'shtli Borsh</div><div class="miprice">45 000</div></div><div class="midesc" id="p1d">Klassik ukraina borshi, yumshoq mol go'shti, lavlagi, karam, smetana</div></div>
+      <div class="mi"><div class="mitop"><div class="miname" id="p2n">Uy eriştalı tovuq sho'rvasi</div><div class="miprice">35 000</div></div><div class="midesc" id="p2d">Iliq uy tovuq sho'rvasi, qo'lda yasalgan erişta, sabzavotlar, ko'katlar</div></div>
+      <div class="mi">
+        <span class="mitag" id="p3tag">🌶 Achchiq</span>
+        <div class="mitop"><div class="miname" id="p3n">Tom-Yam Kung</div><div class="miprice">85 000</div></div>
+        <div class="midesc" id="p3d">Tailand qirol qisqichbaqalari, kokosom süt, limongrass, galangal, chili — premium</div>
+      </div>
+      <div class="mi"><div class="mitop"><div class="miname" id="p4n">Kuksu</div><div class="miprice">55 000</div></div><div class="midesc" id="p4d">Koreyscha erişta sho'rvasi, tovuq, mavsumiy sabzavotlar, qaynatilgan tuxum</div></div>
+      <div class="mi">
+        <span class="mitag" id="p5tag">🔥 Bestseller</span>
+        <div class="mitop"><div class="miname" id="p5n">Kimchi Tige</div><div class="miprice">60 000</div></div>
+        <div class="midesc" id="p5d">An'anaviy koreyscha kimchi sho'rvasi, tofu, cho'chqa go'shti, qizil sho'rva</div>
+      </div>
+      <div class="mi"><div class="mitop"><div class="miname" id="p6n">Pishloqli krem-sho'rva</div><div class="miprice">45 000</div></div><div class="midesc" id="p6d">Nozik pishloq kremi, xrustli oltin grentki, yangi ko'katlar</div></div>
+      <div class="mi"><div class="mitop"><div class="miname" id="p7n">Qovoqli krem-sho'rva</div><div class="miprice">45 000</div></div><div class="midesc" id="p7d">Mavsumiy qovoq kremi, qovoq urug'lari, zaytun yog'i tomchilari</div></div>
+    </div>
+  </div>
+
+  <!-- MAINS -->
+  <div class="cat-panel" id="cat-mains">
+    <div class="cat-hero-grid" style="grid-template-columns:1fr 1fr 1fr;height:220px">
+      <img src="https://images.unsplash.com/photo-1514516870897-e9ad31b46b5b?w=500&q=80" alt="Lamb">
+      <img src="https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?w=500&q=80" alt="Pasta">
+      <img src="https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=500&q=80" alt="Salmon">
+    </div>
+    <div class="mgrid">
+      <div class="mi">
+        <span class="mitag" id="m1tag">⭐ Oshpaz tavsiyasi</span>
+        <div class="mitop"><div class="miname" id="m1n">Demi-glas sosli qo'y qovurg'asi va grilli sabzavotlar</div><div class="miprice">140 000</div></div>
+        <div class="midesc" id="m1d">Yumshoq va xushbo'y qo'y go'shti, boyitilgan demi-glas sousi, mavsumiy grilli sabzavotlar</div>
+      </div>
+      <div class="mi"><div class="mitop"><div class="miname" id="m2n">Mol go'shti medalonlari va grilli sabzavotlar</div><div class="miprice">35 000</div></div><div class="midesc" id="m2d">Nozik mol go'shti medalonlari, rangbarang grilli mavsumiy sabzavotlar</div></div>
+      <div class="mi"><div class="mitop"><div class="miname" id="m3n">Qishloqcha kartoshka va qo'ziqorin</div><div class="miprice">110 000</div></div><div class="midesc" id="m3d">Rustic uslubdagi pishirilgan kartoshka, qo'ziqorinlar, aromatik o'tlar</div></div>
+      <div class="mi">
+        <span class="mitag" id="m4tag">🍝 Italiya</span>
+        <div class="mitop"><div class="miname" id="m4n">Tovuq fileyli Karbonara</div><div class="miprice">55 000</div></div>
+        <div class="midesc" id="m4d">Kremli karbonara sousi, nozik grilli tovuq filesi, parmezan, qora murch</div>
+      </div>
+      <div class="mi">
+        <span class="mitag" id="m5tag">🍚 Italiya</span>
+        <div class="mitop"><div class="miname" id="m5n">Qo'ziqorinli krem sosda Rizotto</div><div class="miprice">50 000</div></div>
+        <div class="midesc" id="m5d">Arborio guruch, qo'ziqorin, boyitilgan slivochny sous, parmezan, ko'katlar</div>
+      </div>
+      <div class="mi"><div class="mitop"><div class="miname" id="m6n">Guruch yostiqchasida alabaliq steyki</div><div class="miprice">90 000</div></div><div class="midesc" id="m6d">Yangi qizil alabaliq, nozik guruch, limon-krem sousi, ko'katlar</div></div>
+      <div class="mi">
+        <span class="mitag" id="m7tag">🇰🇷 Koreya</span>
+        <div class="mitop"><div class="miname" id="m7n">Chapche (shisha erişta)</div><div class="miprice">55 000</div></div>
+        <div class="midesc" id="m7d">Koreyscha shisha erişta, mol go'shti, ko'katlar, sabzavotlar, soya sousi</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUSHI -->
+  <div class="cat-panel" id="cat-sushi">
+    <div class="cat-hero-grid" style="grid-template-columns:3fr 2fr;height:240px">
+      <img src="https://images.unsplash.com/photo-1553621042-f6e147245754?w=900&q=80" alt="Sushi platter">
+      <img src="https://images.unsplash.com/photo-1617196034183-421b4040ed20?w=600&q=80" alt="Sushi">
+    </div>
+
+    <span class="sublbl" id="sub1">🍣 Sushi Rolllar</span>
+    <div class="mgrid">
+      <div class="mi"><span class="mitag" id="r1tag">⭐ Premium</span><div class="mitop"><div class="miname">Philadelphia Premium</div><div class="miprice">120 000</div></div><div class="midesc" id="r1d">Qizil baliq, krem pishloq, avokado — premium nori</div></div>
+      <div class="mi"><div class="mitop"><div class="miname">Kanada Premium</div><div class="miprice">110 000</div></div><div class="midesc" id="r2d">Qisqichbaqa, avokado, krem pishloq, tobiko ikrasi</div></div>
+      <div class="mi"><div class="mitop"><div class="miname">Kaliforniya Tobiko</div><div class="miprice">60 000 – 80 000</div></div><div class="midesc" id="r3d">Qisqichbaqa / Qizil baliq / Ilonbaliq — tobiko ikrasi bilan</div></div>
+      <div class="mi"><div class="mitop"><div class="miname">Ebi Premium</div><div class="miprice">120 000</div></div><div class="midesc" id="r4d">Qirollik qisqichbaqa, avokado, nozik krema sousi</div></div>
+      <div class="mi"><div class="mitop"><div class="miname">Yasai Roll</div><div class="miprice">45 000</div></div><div class="midesc" id="r5d">🌱 Vegetarian: avokado, bodring, yashil piyoz, kunjut</div></div>
+      <div class="mi"><div class="mitop"><div class="miname">Alaska Roll</div><div class="miprice">70 000</div></div><div class="midesc" id="r6d">Qizil baliq, bodring, avokado, mayonez</div></div>
+    </div>
+
+    <span class="sublbl" id="sub2">🔥 Pishirilgan Rolllar</span>
+    <div class="mgrid">
+      <div class="mi"><div class="mitop"><div class="miname" id="b1n">Qizil baliq / Ilonbaliq / Qisqichbaqa / Tuna</div><div class="miprice">70 000</div></div><div class="midesc" id="b1d">Issiq pishirilgan, mayonez sousi va ikra bilan</div></div>
+      <div class="mi"><div class="mitop"><div class="miname" id="b2n">Kalamar / Qor qisqichbaqa</div><div class="miprice">60 000</div></div><div class="midesc" id="b2d">Pishirilgan roll, nozik kremli sous bilan</div></div>
+      <div class="mi"><div class="mitop"><div class="miname" id="b3n">Tovuqli pishirilgan roll</div><div class="miprice">50 000</div></div><div class="midesc" id="b3d">Grilli tovuq, kremli sous, kunjut, ko'katlar</div></div>
+      <div class="mi"><div class="mitop"><div class="miname" id="b4n">Fusion pishirilgan roll</div><div class="miprice">70 000</div></div><div class="midesc" id="b4d">Oshpazning o'ziga xos maxsus fusion retsepti</div></div>
+    </div>
+
+    <span class="sublbl" id="sub3">⚡ Tempura Rolllar</span>
+    <div class="mgrid">
+      <div class="mi"><div class="mitop"><div class="miname" id="t1n">Spaysi Tempura (barcha turlari)</div><div class="miprice">50 000 – 70 000</div></div><div class="midesc" id="t1d">Qizarib qovurilgan tempura qobig'i, achchiq sriracha sousi</div></div>
+      <div class="mi"><div class="mitop"><div class="miname" id="t2n">Slivochny Tempura (barcha turlari)</div><div class="miprice">50 000 – 70 000</div></div><div class="midesc" id="t2d">Qovurilgan xrustli tempura, nozik kremli sous bilan</div></div>
+    </div>
+
+    <span class="sublbl" id="sub4">🎁 Sushi Setlari</span>
+    <div class="mgrid">
+      <div class="mi"><div class="mitop"><div class="miname" id="set1">Klassik Set</div><div class="miprice">390 000</div></div></div>
+      <div class="mi"><div class="mitop"><div class="miname">Philadelphia Set</div><div class="miprice">430 000</div></div></div>
+      <div class="mi"><div class="mitop"><div class="miname">Unagi / Ebi Set</div><div class="miprice">430 000</div></div></div>
+      <div class="mi"><div class="mitop"><div class="miname" id="set4">Juftlik uchun Set</div><div class="miprice">170 000</div></div></div>
+      <div class="mi"><div class="mitop"><div class="miname" id="set5">Dengiz miksi</div><div class="miprice">200 000</div></div></div>
+      <div class="mi"><div class="mitop"><div class="miname">Fusion Set</div><div class="miprice">670 000</div></div></div>
+    </div>
+
+    <div style="margin-top:2px;background:var(--b2);padding:18px 26px;border:1px solid rgba(201,168,76,.1)">
+      <span style="font-size:.68rem;color:var(--g);letter-spacing:.18em;text-transform:uppercase" id="also-lbl">Shuningdek:</span>
+      <span style="font-size:.82rem;color:var(--tm);margin-left:12px" id="also-val">Pishirilgan Sushi / Spaysi Sushi — 15 000 – 20 000 &nbsp;·&nbsp; Hoso — 30 000 – 40 000</span>
+    </div>
+  </div>
+
+  <!-- SIDES -->
+  <div class="cat-panel" id="cat-sides">
+    <img class="cat-hero" src="https://images.unsplash.com/photo-1518013431117-eb1465fa5752?w=1200&q=80" alt="Sides">
+    <div class="sgrid">
+      <div class="mi"><div class="mitop"><div class="miname" id="g1">Kartoshka fri</div><div class="miprice">20 000</div></div></div>
+      <div class="mi"><div class="mitop"><div class="miname" id="g2">Guruch</div><div class="miprice">15 000</div></div></div>
+      <div class="mi"><div class="mitop"><div class="miname" id="g3">Kartoshka dol'ki</div><div class="miprice">20 000</div></div></div>
+      <div class="mi"><div class="mitop"><div class="miname" id="g4">Kartoshka püre</div><div class="miprice">15 000</div></div></div>
+    </div>
+    <span class="sublbl" id="bread-lbl" style="margin-top:24px">🍞 Non Mahsulotlari</span>
+    <div class="mgrid">
+      <div class="mi"><div class="mitop"><div class="miname" id="br1">Non / Lepyoshka</div><div class="miprice">5 000</div></div></div>
+      <div class="mi"><div class="mitop"><div class="miname" id="br2">Sosli pishirilgan non</div><div class="miprice">25 000</div></div></div>
+    </div>
+  </div>
+
+  <!-- DRINKS -->
+  <div class="cat-panel" id="cat-drinks">
+    <img class="cat-hero" src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=1200&q=80" alt="Coffee">
+    <div class="dkgrid">
+      <div class="dcard"><span class="dico">☕</span><div class="dname" id="dk1n">Kofe</div><div class="ditems" id="dk1v">Espresso / Americano — 23 000<br>Kapuchino / Latte — 28 000<br>Raf — 35 000<br>Ice variantlar — 23 000 – 30 000</div></div>
+      <div class="dcard"><span class="dico">🍫</span><div class="dname" id="dk2n">Kakao va Shokolad</div><div class="ditems" id="dk2v">Kakao — 27 000<br>Issiq Shokolad — 35 000</div></div>
+      <div class="dcard"><span class="dico">🍵</span><div class="dname" id="dk3n">Choy</div><div class="ditems" id="dk3v">Muallif choy — 15 000 – 30 000</div></div>
+      <div class="dcard"><span class="dico">🍋</span><div class="dname" id="dk4n">Limonadlar</div><div class="ditems" id="dk4v">Limonad — 30 000<br>Grafin — 75 000<br>Barcha turlari — 25 000 – 45 000</div></div>
+      <div class="dcard"><span class="dico">🥤</span><div class="dname" id="dk5n">Milkshake</div><div class="ditems" id="dk5v">Barcha turlari — 25 000 – 45 000</div></div>
+      <div class="dcard"><span class="dico">🍊</span><div class="dname" id="dk6n">Yangi Sharbatlar (Fresh)</div><div class="ditems" id="dk6v">Toza meva freshlari — 25 000 – 45 000</div></div>
+    </div>
+  </div>
+
+</div>
+</section>
+
+<!-- ══ GALLERY ══ -->
+<section id="gallery">
+<div class="wrap pad">
+  <div class="sh">
+    <span class="slbl" id="gl-lbl">Bizning Taomlar</span>
+    <h2 class="stitle" id="gl-title">Taom <em>Galereyasi</em></h2>
+  </div>
+  <div class="gallery-grid">
+    <div class="gi tall"><img src="https://images.unsplash.com/photo-1553621042-f6e147245754?w=600&q=80" alt="Sushi"><div class="gi-cap" id="gc1">Sushi Premium</div></div>
+    <div class="gi"><img src="https://images.unsplash.com/photo-1514516870897-e9ad31b46b5b?w=600&q=80" alt="Lamb"><div class="gi-cap" id="gc2">Qo'y qovurg'asi</div></div>
+    <div class="gi"><img src="https://images.unsplash.com/photo-1548943487-a2e4e43b4853?w=600&q=80" alt="Tom Yum"><div class="gi-cap" id="gc3">Tom-Yam Kung</div></div>
+    <div class="gi"><img src="https://images.unsplash.com/photo-1543339308-43e59d6b73a6?w=600&q=80" alt="Salad"><div class="gi-cap" id="gc4">Yangi Salatlar</div></div>
+    <div class="gi wide"><img src="https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?w=900&q=80" alt="Pasta"><div class="gi-cap" id="gc5">Karbonara</div></div>
+    <div class="gi"><img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&q=80" alt="Coffee"><div class="gi-cap" id="gc6">Premium Kofe</div></div>
+    <div class="gi"><img src="https://images.unsplash.com/photo-1547592180-85f173990554?w=600&q=80" alt="Soup"><div class="gi-cap" id="gc7">Krem Sho'rva</div></div>
+    <div class="gi"><img src="https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=600&q=80" alt="Salmon"><div class="gi-cap" id="gc8">Alabaliq Steyki</div></div>
+  </div>
+</div>
+</section>
+
+<!-- ══ FEAT ══ -->
+<div class="feat">
+  <div class="fgrid">
+    <div class="fitem"><span class="fico">🌍</span><div class="ftitle" id="f1t">Uch Qit'a</div><div class="fdesc" id="f1d">Yevropa, Osiyo va Sharq oshxonalari — bir tomdan</div></div>
+    <div class="fitem"><span class="fico">👨‍🍳</span><div class="ftitle" id="f2t">Tajribali Oshpazlar</div><div class="fdesc" id="f2d">Yevropa restoran maktabida 12+ yil tajriba</div></div>
+    <div class="fitem"><span class="fico">🌿</span><div class="ftitle" id="f3t">Yangi Mahsulotlar</div><div class="fdesc" id="f3d">Har kuni mahalliy va import ingredientlar</div></div>
+    <div class="fitem"><span class="fico">🏡</span><div class="ftitle" id="f4t">Iliq Muhit</div><div class="fdesc" id="f4d">Oila, sana va bayramlar uchun mukammal joy</div></div>
+  </div>
+</div>
+
+<!-- ══ TESTIMONIALS ══ -->
+<section>
+<div class="wrap pad">
+  <div class="sh">
+    <span class="slbl" id="rv-lbl">Mijozlar Fikri</span>
+    <h2 class="stitle" id="rv-title">Ular Nima <em>Deydi?</em></h2>
+  </div>
+  <div class="testi-row">
+    <div class="tcard">
+      <div class="tstars">★★★★★</div>
+      <div class="ttext" id="t1tx">"Nurafshonda bunday restoran bo'lishi hayratlanarli. Sushi va Tom-Yam — dunyodagi eng mazali! Har hafta kelishga qaror qildik."</div>
+      <div class="tname" id="t1nm">— Aziza M., Nurafshon</div>
+    </div>
+    <div class="tcard">
+      <div class="tstars">★★★★★</div>
+      <div class="ttext" id="t2tx">"Qo'y qovurg'asi va demi-glas sousi — umrim bo'yi yemaganman bunaqasini. Muhit ham juda zo'r, xodimlari muloyim."</div>
+      <div class="tname" id="t2nm">— Jasur K., Toshkent</div>
+    </div>
+    <div class="tcard">
+      <div class="tstars">★★★★★</div>
+      <div class="ttext" id="t3tx">"Philadelphia Premium va Kimchi Tige kombinatsiyasi — Fusion nomi bejiz emas. Har gal yangi narsalar kashf etamiz!"</div>
+      <div class="tname" id="t3nm">— Malika R., Nurafshon</div>
+    </div>
+  </div>
+</div>
+</section>
+
+<div class="sep"><div class="sepline"></div><div class="dia"></div><div class="sepline r"></div></div>
+
+<!-- ══ CONTACT ══ -->
+<section id="contact">
+<div class="cgrid">
+  <div class="cmap">
+    <img src="https://images.unsplash.com/photo-1600565193348-f74bd3c7ccdf?w=900&q=80" alt="Restaurant">
+    <div class="cmap-info">
+      <div class="citem"><div class="cicon">📍</div><div><div class="clbl" id="cl1">Manzil</div><div class="cval" id="cv1">Nurafshon, O'zbekiston</div></div></div>
+      <div class="citem"><div class="cicon">📞</div><div><div class="clbl" id="cl2">Telefon</div><div class="cval"><a href="tel:+998337832828" style="color:inherit;text-decoration:none">+998 33 783 28 28</a></div></div></div>
+      <div class="citem"><div class="cicon">📸</div><div><div class="clbl">Instagram</div><div class="cval"><a href="https://instagram.com/restaurant__fusion" target="_blank" style="color:inherit;text-decoration:none">@restaurant__fusion</a></div></div></div>
+      <div class="citem"><div class="cicon">🕐</div><div><div class="clbl" id="cl3">Ish Vaqti</div><div class="cval" id="cv3">Har Kuni<br>11:00 — 23:00</div></div></div>
+    </div>
+  </div>
+  <div class="cform">
+    <h3 class="cform-title" id="cf-title">Stol Band Qilish</h3>
+    <p class="cform-sub" id="cf-sub">Xabar yuboring yoki telefon qiling — 30 daqiqa ichida tasdiqlaymiz.</p>
+    <div class="frow">
+      <div style="display:flex;flex-direction:column;gap:6px"><label class="flbl" id="fl1">Ismingiz</label><input class="fi" id="inp-name" placeholder="To'liq ism"></div>
+      <div style="display:flex;flex-direction:column;gap:6px"><label class="flbl" id="fl2">Telefon</label><input class="fi" id="inp-phone" placeholder="+998 __ ___ __ __"></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:6px"><label class="flbl" id="fl3">Xabar</label><textarea class="ft" id="inp-msg" placeholder="Sana, vaqt, mehmonlar soni..."></textarea></div>
+    <button class="fsub" id="res-btn" onclick="reserve()">STOL BAND QILISH</button>
+  </div>
+</div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="ft-grid">
+    <div class="ft-brand">
+      <span class="fl-logo">FUSION</span>
+      <p id="ft-tagline">Yevropa, Osiyo va Sharq oshxonalarining noyob uyg'unligi — Nurafshonda.</p>
+    </div>
+    <div class="ft-nav">
+      <h4 id="ftn-h">Navigatsiya</h4>
+      <ul>
+        <li><a href="#about"   id="ftn1">Biz haqimizda</a></li>
+        <li><a href="#picks"   id="ftn2">Oshpaz Tavsiyasi</a></li>
+        <li><a href="#menu"    id="ftn3">Menyu</a></li>
+        <li><a href="#gallery" id="ftn4">Galereya</a></li>
+        <li><a href="#contact" id="ftn5">Aloqa</a></li>
+      </ul>
+    </div>
+    <div class="ft-contact">
+      <h4 id="ftc-h">Bog'lanish</h4>
+      <p>
+        <a href="tel:+998337832828">+998 33 783 28 28</a><br>
+        <a href="https://instagram.com/restaurant__fusion" target="_blank">@restaurant__fusion</a><br>
+        <span id="ftc-city">Nurafshon, O'zbekiston</span><br>
+        <span id="ftc-hrs">Har kuni 11:00 – 23:00</span>
+      </p>
+    </div>
+  </div>
+  <div class="ft-bottom">
+    <span class="ft-copy" id="ft-copy">© 2025 FUSION Restaurant · Nurafshon, O'zbekiston. Barcha huquqlar himoyalangan.</span>
+    <div class="ft-soc">
+      <a href="https://instagram.com/restaurant__fusion" class="soca" target="_blank">📸</a>
+      <a href="tel:+998337832828" class="soca">📞</a>
+    </div>
+  </div>
+</footer>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- FLOAT BTNS -->
+<div class="floatbtn">
+  <a href="https://instagram.com/restaurant__fusion" target="_blank" class="fbtn fbtn-ig" title="Instagram">📸</a>
+  <a href="tel:+998337832828" class="fbtn fbtn-call" title="Qo'ng'iroq">📞</a>
+</div>
+
+<script>
+/* ─────────── TRANSLATIONS ─────────── */
+const T = {
+uz:{
+  'nl-about':'Biz haqimizda','nl-picks':'Oshpaz tavsiyasi','nl-menu':'Menyu','nl-gal':'Galereya','nl-contact':'Aloqa',
+  'h-eye':'Nurafshon · 2024-yildan','h-sub':'Sharq va G\'arb — bir dasturxonda','h-scrl':'Pastga','h-chip4':'🌿 Yangi Mahsulotlar',
+  'st1':'Yil Tajriba','st2':'Menyu Taomi','st3':'Millat Oshxonasi','st4':'Instagram Obunachilar',
+  'aq-text':'"Har bir taom uchta qit\'a hikoyasini bir xizmatda aytib beradi."','aq-sig':'— Bosh Oshpaz, Fusion Restaurant',
+  'ab-lbl':'Bizning Hikoyamiz','ab-title':'Oshpazlik<br><em>San\'atining</em> Uyiga Xush Kelibsiz',
+  'ab-b1':'FUSION — Nurafshondagi noyob restoran bo\'lib, Yevropa, Osiyo va Sharq oshxonalarini bitta dasturxonda birlashtiradi. Biz uchun har bir taom — bu san\'at asari.',
+  'ab-b2':'Bizning oshpazlarimiz Yevropaning yetakchi oshxonalarida 12 yildan ortiq tajribaga ega. Ular har kuni eng yangi mahsulotlardan noyob ta\'mlar yaratadi.',
+  'at1':'🌍 Fusion Oshxona','at2':'🌿 Yangi Ingredientlar','at3':'👨‍🍳 12+ Yil Tajriba','at4':'📍 Nurafshon',
+  'cp-lbl':'Maxsus Tavsiya','cp-title':'Oshpaz <em>Tavsiyalari</em>','cp-desc':'Bizning eng sevimli va eng ko\'p buyuriladigan taomlarimiz',
+  'cb1':'Oshpaz tavsiyasi','cn1':'Qo\'y qovurg\'asi Demi-glas','cd1':'Yumshoq va xushbo\'y qo\'y go\'shti, boyitilgan demi-glas sousi, mavsumiy grilli sabzavotlar',
+  'cb2':'Premium','cn2':'Tom-Yam Kung','cd2':'Tailand qirol qisqichbaqalari, kokosom süt, limongrass, chili',
+  'cb3':'Bestseller','cn3':'Philadelphia Premium Roll','cd3':'Qizil baliq, krem pishloq, avokado — premium nori ichida',
+  'm-lbl':'To\'liq Menyu','m-title':'Bizning <em>Menyumiz</em>',
+  'tab-s':'🥗 Salatlar','tab-p':'🍲 Sho\'rvalar','tab-m':'🍽 Asosiy','tab-r':'🍣 Sushi','tab-g':'🍟 Garnitür','tab-d':'☕ Ichimliklar',
+  's1n':'Rukkola va Burata salati','s1d':'Yangi rukkola, burata pishlog\'i, olcha pomidorlar, zaytun yog\'i',
+  's2n':'Gretsiya salati','s2d':'Pomidor, bodring, zaytun, feta pishloq, zaytun yog\'i',
+  's3n':'Pomidor va Strachatelella','s3d':'Pishgan pomidorlar, strachatelella pishloq, balzamik reduksiya',
+  's4n':'Klassik "Sezar" — Tovuq bilan','s4d':'Romaine, grilli tovuq, parmezan, krutoni, uy sousi',
+  's5n':'Sezar — Qisqichbaqa bilan','s5d':'Romaine, grilli qisqichbaqa, parmezan, krutoni',
+  's6n':'Smetanali sabzavot salati','s6d':'Mavsumiy yangi sabzavotlar, qaymoq sousi bilan',
+  's7n':'Qovurilgan baqlajon va Rukkola','s7d':'Xrustli baqlajon, yangi rukkola, nozik sous',
+  's8n':'Tuna salati','s8d':'Premium tuna, aralash ko\'katlar, kaperslar, zaytun yog\'i',
+  's9n':'Avokadoli Rukkola','s9d':'Yangi rukkola, avokado, limon sousi, kunjut',
+  'p1n':'Mol go\'shtli Borsh','p1d':'Klassik ukraina borshi, mol go\'shti, lavlagi, smetana',
+  'p2n':'Uy eriştalı tovuq sho\'rvasi','p2d':'Uy eriştalı tovuq sho\'rvasi, sabzavotlar, ko\'katlar',
+  'p3tag':'🌶 Achchiq','p3n':'Tom-Yam Kung','p3d':'Tailand qirol qisqichbaqalari, kokosom süt, limongrass, chili',
+  'p4n':'Kuksu','p4d':'Koreyscha erişta sho\'rvasi, tovuq, sabzavotlar, tuxum',
+  'p5tag':'🔥 Bestseller','p5n':'Kimchi Tige','p5d':'Koreyscha kimchi sho\'rvasi, tofu, cho\'chqa go\'shti',
+  'p6n':'Pishloqli krem-sho\'rva','p6d':'Nozik pishloq kremi, xrustli grentki, ko\'katlar',
+  'p7n':'Qovoqli krem-sho\'rva','p7d':'Mavsumiy qovoq kremi, urug\'lar, zaytun yog\'i',
+  'm1tag':'⭐ Oshpaz tavsiyasi','m1n':'Demi-glas sosli qo\'y qovurg\'asi','m1d':'Yumshoq qo\'y go\'shti, demi-glas sousi, grilli sabzavotlar',
+  'm2n':'Mol go\'shti medalonlari','m2d':'Nozik mol go\'shti, grilli sabzavotlar, maxsus sous',
+  'm3n':'Qishloqcha kartoshka va qo\'ziqorin','m3d':'Rustic uslubdagi kartoshka, qo\'ziqorinlar, o\'tlar',
+  'm4tag':'🍝 Italiya','m4n':'Tovuq fileyli Karbonara','m4d':'Kremli karbonara sousi, tovuq filesi, parmezan',
+  'm5tag':'🍚 Italiya','m5n':'Qo\'ziqorinli Rizotto','m5d':'Arborio guruch, qo\'ziqorin, kremli sous, parmezan',
+  'm6n':'Guruch yostiqchasida alabaliq steyki','m6d':'Yangi alabaliq, nozik guruch, limon sousi',
+  'm7tag':'🇰🇷 Koreya','m7n':'Chapche (shisha erişta)','m7d':'Koreyscha shisha erişta, mol go\'shti, sabzavotlar, soya sousi',
+  'sub1':'🍣 Sushi Rolllar','sub2':'🔥 Pishirilgan Rolllar','sub3':'⚡ Tempura Rolllar','sub4':'🎁 Sushi Setlari',
+  'r1tag':'⭐ Premium','r1d':'Qizil baliq, krem pishloq, avokado — premium nori',
+  'r2d':'Qisqichbaqa, avokado, krem pishloq, tobiko','r3d':'Qisqichbaqa / Qizil baliq / Ilonbaliq — tobiko bilan',
+  'r4d':'Qirollik qisqichbaqa, avokado, kremli sous','r5d':'🌱 Vegetarian: avokado, bodring, yashil piyoz',
+  'r6d':'Qizil baliq, bodring, avokado, mayonez',
+  'b1n':'Qizil baliq / Ilonbaliq / Qisqichbaqa / Tuna','b1d':'Pishirilgan, mayonez va ikra bilan',
+  'b2n':'Kalamar / Qor qisqichbaqa','b2d':'Pishirilgan roll, kremli sous bilan',
+  'b3n':'Tovuqli pishirilgan roll','b3d':'Grilli tovuq, kremli sous, kunjut',
+  'b4n':'Fusion pishirilgan roll','b4d':'Oshpazning maxsus fusion retsepti',
+  't1n':'Spaysi Tempura (barcha turlari)','t1d':'Xrustli tempura, achchiq sriracha sousi',
+  't2n':'Slivochny Tempura (barcha turlari)','t2d':'Xrustli tempura, kremli sous',
+  'set1':'Klassik Set','set4':'Juftlik uchun Set','set5':'Dengiz miksi',
+  'also-lbl':'Shuningdek:','also-val':'Pishirilgan Sushi / Spaysi Sushi — 15 000 – 20 000 · Hoso — 30 000 – 40 000',
+  'g1':'Kartoshka fri','g2':'Guruch','g3':'Kartoshka dol\'ki','g4':'Kartoshka püre',
+  'bread-lbl':'🍞 Non Mahsulotlari','br1':'Non / Lepyoshka','br2':'Sosli pishirilgan non',
+  'dk1n':'Kofe','dk1v':'Espresso / Americano — 23 000<br>Kapuchino / Latte — 28 000<br>Raf — 35 000<br>Ice variantlar — 23 000 – 30 000',
+  'dk2n':'Kakao va Shokolad','dk2v':'Kakao — 27 000<br>Issiq Shokolad — 35 000',
+  'dk3n':'Choy','dk3v':'Muallif choy — 15 000 – 30 000',
+  'dk4n':'Limonadlar','dk4v':'Limonad — 30 000<br>Grafin — 75 000<br>Barcha turlari — 25 000 – 45 000',
+  'dk5n':'Milkshake','dk5v':'Barcha turlari — 25 000 – 45 000',
+  'dk6n':'Yangi Sharbatlar','dk6v':'Toza meva freshlari — 25 000 – 45 000',
+  'gl-lbl':'Bizning Taomlar','gl-title':'Taom <em>Galereyasi</em>',
+  'gc1':'Sushi Premium','gc2':'Qo\'y qovurg\'asi','gc3':'Tom-Yam Kung','gc4':'Yangi Salatlar','gc5':'Karbonara','gc6':'Premium Kofe','gc7':'Krem Sho\'rva','gc8':'Alabaliq Steyki',
+  'f1t':'Uch Qit\'a','f1d':'Yevropa, Osiyo va Sharq — bir tomdan','f2t':'Tajribali Oshpazlar','f2d':'12+ yil yevropa restoran tajribasi',
+  'f3t':'Yangi Mahsulotlar','f3d':'Har kuni mahalliy va import ingredientlar','f4t':'Iliq Muhit','f4d':'Oila, sana va bayramlar uchun mukammal',
+  'rv-lbl':'Mijozlar Fikri','rv-title':'Ular Nima <em>Deydi?</em>',
+  't1tx':'"Nurafshonda bunday restoran bo\'lishi hayratlanarli. Sushi va Tom-Yam — umrim esimda qoldi!"','t1nm':'— Aziza M., Nurafshon',
+  't2tx':'"Qo\'y qovurg\'asi va demi-glas sousi — umrim bo\'yi yemaganman bunaqasini."','t2nm':'— Jasur K., Toshkent',
+  't3tx':'"Philadelphia Premium va Kimchi Tige — Fusion nomi bejiz emas. Har gal yangi kashfiyot!"','t3nm':'— Malika R., Nurafshon',
+  'cl1':'Manzil','cv1':'Nurafshon, O\'zbekiston','cl2':'Telefon','cl3':'Ish Vaqti','cv3':'Har Kuni<br>11:00 — 23:00',
+  'cf-title':'Stol Band Qilish','cf-sub':'Xabar yuboring yoki telefon qiling — 30 daqiqa ichida tasdiqlaymiz.',
+  'fl1':'Ismingiz','fl2':'Telefon','fl3':'Xabar','res-btn':'STOL BAND QILISH',
+  'ft-tagline':'Yevropa, Osiyo va Sharq oshxonalarining noyob uyg\'unligi — Nurafshonda.',
+  'ftn-h':'Navigatsiya','ftn1':'Biz haqimizda','ftn2':'Oshpaz Tavsiyasi','ftn3':'Menyu','ftn4':'Galereya','ftn5':'Aloqa',
+  'ftc-h':'Bog\'lanish','ftc-city':'Nurafshon, O\'zbekiston','ftc-hrs':'Har kuni 11:00 – 23:00',
+  'ft-copy':'© 2025 FUSION Restaurant · Nurafshon. Barcha huquqlar himoyalangan.',
+  '_ok': n=>`✅ Rahmat, ${n}! 30 daqiqa ichida bog\'lanamiz.`,'_err':'Iltimos, ism va telefon kiriting.',
+  '_ph_name':'To\'liq ism','_ph_msg':'Sana, vaqt, mehmonlar soni...'
+},
+ru:{
+  'nl-about':'О нас','nl-picks':'От шефа','nl-menu':'Меню','nl-gal':'Галерея','nl-contact':'Контакты',
+  'h-eye':'Нурафшон · С 2024 года','h-sub':'Восток встречает Запад — за одним столом','h-scrl':'Вниз','h-chip4':'🌿 Свежие продукты',
+  'st1':'Лет опыта','st2':'Блюд в меню','st3':'Кухни мира','st4':'Подписчиков Instagram',
+  'aq-text':'"Каждое блюдо рассказывает историю трёх континентов, объединённых за одним столом."','aq-sig':'— Шеф-повар, Fusion Restaurant',
+  'ab-lbl':'Наша История','ab-title':'Добро пожаловать в дом<br><em>кулинарного искусства</em>',
+  'ab-b1':'FUSION — уникальный ресторан в Нурафшоне, объединяющий лучшее из европейской, азиатской и восточной кухонь на одном столе.',
+  'ab-b2':'Наши повара имеют более 12 лет опыта в ведущих европейских ресторанах и создают неповторимые вкусы из свежайших ингредиентов каждый день.',
+  'at1':'🌍 Фьюжн-кухня','at2':'🌿 Свежие продукты','at3':'👨‍🍳 12+ лет опыта','at4':'📍 Нурафшон',
+  'cp-lbl':'Особые Рекомендации','cp-title':'От <em>Шефа</em>','cp-desc':'Наши самые любимые и популярные блюда',
+  'cb1':'Рекомендация шефа','cn1':'Баранья корейка Деми-гляс','cd1':'Нежная баранина, насыщенный соус демиглас, овощи гриль',
+  'cb2':'Премиум','cn2':'Том-Ям Кунг','cd2':'Королевские тигровые креветки, кокосовое молоко, лемонграсс, чили',
+  'cb3':'Бестселлер','cn3':'Philadelphia Premium Roll','cd3':'Лосось, сливочный сыр, авокадо в нори премиум',
+  'm-lbl':'Полное Меню','m-title':'Наше <em>Меню</em>',
+  'tab-s':'🥗 Салаты','tab-p':'🍲 Супы','tab-m':'🍽 Вторые блюда','tab-r':'🍣 Суши','tab-g':'🍟 Гарниры','tab-d':'☕ Напитки',
+  's1n':'Салат с рукколой и бурратой','s1d':'Свежая руккола, буррата, черри-томаты, оливковое масло extra virgin',
+  's2n':'Греческий салат','s2d':'Помидоры, огурец, оливки, сыр фета, оливковое масло, орегано',
+  's3n':'Томаты со страчателлой','s3d':'Спелые томаты, страчателла, бальзамическая редукция',
+  's4n':'Классический «Цезарь» с курицей','s4d':'Романо, курица гриль, пармезан, крутоны, домашний соус',
+  's5n':'Цезарь с креветками','s5d':'Романо, жареные креветки, пармезан, крутоны, соус Цезарь',
+  's6n':'Овощной салат со сметаной','s6d':'Сезонные свежие овощи со сметанным соусом',
+  's7n':'Хрустящие баклажаны с рукколой','s7d':'Хрустящие баклажаны, свежая руккола, нежный соус',
+  's8n':'Салат с тунцом','s8d':'Тунец премиум, микс-салат, каперсы, красный лук, оливковое масло',
+  's9n':'Руккола с авокадо','s9d':'Свежая руккола, авокадо, лимонный соус, кунжут',
+  'p1n':'Борщ с говядиной','p1d':'Классический борщ, говядина, свёкла, капуста, сметана',
+  'p2n':'Куриный бульон с домашней лапшой','p2d':'Куриный бульон, домашняя лапша, овощи, зелень',
+  'p3tag':'🌶 Острое','p3n':'Том-Ям Кунг','p3d':'Тигровые креветки, кокосовое молоко, лемонграсс, галангал, чили',
+  'p4n':'Куксу','p4d':'Корейский суп с лапшой, курица, овощи, яйцо всмятку',
+  'p5tag':'🔥 Бестселлер','p5n':'Кимчи Тиге','p5d':'Корейский суп-кимчи, тофу, свинина, красный бульон',
+  'p6n':'Сырный крем-суп с гренками','p6d':'Нежный сырный крем, хрустящие гренки, зелень',
+  'p7n':'Тыквенный крем-суп','p7d':'Сезонный тыквенный крем, семечки, оливковое масло',
+  'm1tag':'⭐ Рекомендация шефа','m1n':'Баранья корейка с овощами гриль под соусом демиглас','m1d':'Нежная баранина, соус демиглас, сезонные овощи гриль',
+  'm2n':'Медальоны из говядины с овощами гриль','m2d':'Нежная говядина, разноцветные овощи гриль, фирменный соус',
+  'm3n':'Картофель по-деревенски с грибами','m3d':'Картофель в деревенском стиле, грибы, ароматные травы',
+  'm4tag':'🍝 Итальянская','m4n':'Сливочная Карбонара с филе цыплёнка','m4d':'Сливочный соус карбонара, куриное филе, пармезан, перец',
+  'm5tag':'🍚 Итальянская','m5n':'Ризотто в сливочно-грибном соусе','m5d':'Рис арборио, грибы, сливочный соус, пармезан, зелень',
+  'm6n':'Стейк из розовой форели на рисовой подушке','m6d':'Свежая форель, нежный рис, лимонный соус, зелень',
+  'm7tag':'🇰🇷 Корейская','m7n':'Стеклянная лапша Чапчхэ','m7d':'Корейская стеклянная лапша, говядина, овощи, соевый соус',
+  'sub1':'🍣 Суши Роллы','sub2':'🔥 Запечённые Роллы','sub3':'⚡ Роллы Темпура','sub4':'🎁 Сеты Роллов',
+  'r1tag':'⭐ Премиум','r1d':'Лосось, сливочный сыр, авокадо — в нори премиум',
+  'r2d':'Краб, авокадо, сливочный сыр, тобико','r3d':'Краб / Лосось / Угорь — с икрой тобико',
+  'r4d':'Королевская креветка, авокадо, сливочный соус','r5d':'🌱 Вегетарианский: авокадо, огурец, зелёный лук',
+  'r6d':'Лосось, огурец, авокадо, майонез',
+  'b1n':'Лосось / Угорь / Креветка / Тунец','b1d':'Запечённый, с майонезным соусом и икрой',
+  'b2n':'Кальмар / Снежный краб','b2d':'Запечённый ролл, сливочный соус',
+  'b3n':'Запечённый ролл с курицей','b3d':'Куриное филе гриль, сливочный соус, кунжут',
+  'b4n':'Запечённый ролл Фьюжн','b4d':'Авторский рецепт шеф-повара',
+  't1n':'Спайси Темпура (все виды)','t1d':'Хрустящая темпура, острый соус sriracha',
+  't2n':'Сливочные Темпура (все виды)','t2d':'Хрустящая темпура, нежный сливочный соус',
+  'set1':'Классический Сет','set4':'Сет для двоих','set5':'Морской микс',
+  'also-lbl':'Также:','also-val':'Суши запечённые / Спайси суши — 15 000 – 20 000 · Хосо — 30 000 – 40 000',
+  'g1':'Картошка фри','g2':'Рис','g3':'Картофельные дольки','g4':'Пюре',
+  'bread-lbl':'🍞 Хлебные изделия','br1':'Хлеб / Лепёшка','br2':'Запечённый хлеб с соусом',
+  'dk1n':'Кофе','dk1v':'Эспрессо / Американо — 23 000<br>Капучино / Латте — 28 000<br>Раф — 35 000<br>Ice варианты — 23 000 – 30 000',
+  'dk2n':'Какао и Шоколад','dk2v':'Какао — 27 000<br>Горячий шоколад — 35 000',
+  'dk3n':'Чай','dk3v':'Авторский чай — 15 000 – 30 000',
+  'dk4n':'Лимонады','dk4v':'Лимонад — 30 000<br>Графин — 75 000<br>Все виды — 25 000 – 45 000',
+  'dk5n':'Milkshake','dk5v':'Все виды — 25 000 – 45 000',
+  'dk6n':'Свежевыжатые соки','dk6v':'Свежие фрукты — 25 000 – 45 000',
+  'gl-lbl':'Наши Блюда','gl-title':'Гастрономическая <em>Галерея</em>',
+  'gc1':'Суши Премиум','gc2':'Баранья корейка','gc3':'Том-Ям Кунг','gc4':'Свежие Салаты','gc5':'Карбонара','gc6':'Кофе Премиум','gc7':'Крем-суп','gc8':'Стейк из форели',
+  'f1t':'Три Континента','f1d':'Европа, Азия и Восток — под одной крышей','f2t':'Опытные Повара','f2d':'12+ лет опыта в европейских ресторанах',
+  'f3t':'Свежие Продукты','f3d':'Ежедневно — местные и импортные продукты','f4t':'Тёплая Атмосфера','f4d':'Идеально для семьи, свиданий и торжеств',
+  'rv-lbl':'Отзывы Гостей','rv-title':'Что Говорят <em>Гости?</em>',
+  't1tx':'"Такой ресторан в Нурафшоне — это невероятно. Суши и Том-Ям остались в памяти навсегда!"','t1nm':'— Азиза М., Нурафшон',
+  't2tx':'"Баранья корейка с демиглас — такого я ещё не пробовал нигде. Атмосфера и сервис — на высшем уровне."','t2nm':'— Жасур К., Ташкент',
+  't3tx':'"Philadelphia Premium и Кимчи Тиге — Fusion не зря так называется. Каждый раз открываем что-то новое!"','t3nm':'— Малика Р., Нурафшон',
+  'cl1':'Адрес','cv1':'Нурафшон, Узбекистан','cl2':'Телефон','cl3':'Время работы','cv3':'Каждый день<br>11:00 — 23:00',
+  'cf-title':'Забронировать Стол','cf-sub':'Напишите нам или позвоните — подтвердим в течение 30 минут.',
+  'fl1':'Ваше имя','fl2':'Телефон','fl3':'Сообщение','res-btn':'ЗАБРОНИРОВАТЬ СТОЛ',
+  'ft-tagline':'Уникальное сочетание европейской, азиатской и восточной кухонь — в Нурафшоне.',
+  'ftn-h':'Навигация','ftn1':'О нас','ftn2':'Рекомендации шефа','ftn3':'Меню','ftn4':'Галерея','ftn5':'Контакты',
+  'ftc-h':'Контакты','ftc-city':'Нурафшон, Узбекистан','ftc-hrs':'Каждый день 11:00 – 23:00',
+  'ft-copy':'© 2025 FUSION Restaurant · Нурафшон. Все права защищены.',
+  '_ok': n=>`✅ Спасибо, ${n}! Свяжемся с вами в течение 30 минут.`,'_err':'Пожалуйста, введите имя и телефон.',
+  '_ph_name':'Полное имя','_ph_msg':'Дата, время, количество гостей...'
+}};
+
+let lang='uz';
+function setL(l){
+  lang=l;
+  document.querySelectorAll('.lb').forEach(b=>b.classList.toggle('on',b.textContent.toLowerCase()===l));
+  const t=T[l];
+  for(const k in t){
+    if(k.startsWith('_'))continue;
+    const el=document.getElementById(k);
+    if(!el)continue;
+    el.innerHTML=t[k];
+  }
+  document.getElementById('inp-name').placeholder=t['_ph_name'];
+  document.getElementById('inp-msg').placeholder=t['_ph_msg'];
+  document.documentElement.lang=l;
+}
+
+function showC(name,btn){
+  document.querySelectorAll('.cat-panel').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.ctab').forEach(b=>b.classList.remove('on'));
+  document.getElementById('cat-'+name).classList.add('on');
+  btn.classList.add('on');
+}
+
+function reserve(){
+  const name=document.getElementById('inp-name').value.trim();
+  const phone=document.getElementById('inp-phone').value.trim();
+  const t=T[lang];
+  if(!name||!phone){showToast(t['_err'],true);return;}
+  showToast(t['_ok'](name));
+  document.getElementById('inp-name').value='';
+  document.getElementById('inp-phone').value='';
+  document.getElementById('inp-msg').value='';
+}
+
+function showToast(msg,err=false){
+  const toast=document.getElementById('toast');
+  toast.textContent=msg;
+  toast.style.background=err?'#c0392b':null;
+  toast.classList.add('show');
+  setTimeout(()=>toast.classList.remove('show'),3500);
+}
+
+// scroll progress
+window.addEventListener('scroll',()=>{
+  const sc=window.scrollY,tot=document.body.scrollHeight-window.innerHeight;
+  document.getElementById('prog').style.width=(sc/tot*100)+'%';
+  const nav=document.getElementById('mainnav');
+  nav.classList.toggle('scrolled',sc>60);
+});
+
+// fade-in
+const io=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='translateY(0)'}});
+},{threshold:.07});
+document.querySelectorAll('.mi,.fitem,.dcard,.tcard,.chef-card,.gi,.stat-box,.citem').forEach(el=>{
+  el.style.opacity='0';el.style.transform='translateY(16px)';
+  el.style.transition='opacity .5s ease, transform .55s ease';
+  io.observe(el);
+});
+
+// Init
+setL('uz');
+</script>
+</body>
+</html>
